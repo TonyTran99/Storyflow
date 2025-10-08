@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>StoryFlow 9 – Kallaway Storytelling Coach (HTML)</title>
+  <title>StoryFlow 9 – Kallaway Storytelling Coach (HTML, Context-Aware)</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <meta name="description" content="StoryFlow 9 – Trợ lý kể chuyện theo 9 chiến thuật Kallaway" />
+  <meta name="description" content="StoryFlow 9 – Trợ lý kể chuyện theo 9 chiến thuật Kallaway, đồng bộ theo chủ đề & đối tượng" />
   <style>
     .prose ul { list-style: disc; padding-left: 1.25rem; }
     .fade-in { animation: fade .25s ease-in; }
-    @keyframes fade { from {opacity: .0; transform: translateY(3px)} to {opacity:1; transform: translateY(0)} }
+    @keyframes fade { from {opacity:.0; transform: translateY(3px)} to {opacity:1; transform: translateY(0)} }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 text-slate-800">
@@ -20,12 +21,12 @@
         <div class="h-9 w-9 rounded-xl bg-slate-900 text-white grid place-items-center font-bold">SF</div>
         <div>
           <h1 class="text-lg md:text-xl font-semibold">StoryFlow 9</h1>
-          <p class="text-xs text-slate-500 -mt-0.5">Trợ lý kể chuyện – 9 chiến thuật vàng (Kallaway)</p>
+          <p class="text-xs text-slate-500 -mt-0.5">Trợ lý kể chuyện – 9 chiến thuật vàng (Kallaway) • Context-Aware</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
         <button id="copyJsonBtn" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white text-sm hover:opacity-90">Sao chép JSON</button>
-        <button id="resetBtn" className="px-3 py-1.5 rounded-lg border text-sm">Reset</button>
+        <button id="resetBtn" class="px-3 py-1.5 rounded-lg border text-sm">Reset</button>
       </div>
     </div>
   </header>
@@ -47,7 +48,6 @@
             <label class="block">
               <div class="text-xs font-medium text-slate-600 mb-1">Mẫu chủ đề nhanh</div>
               <select id="topicPreset" class="w-full rounded-xl border border-slate-300 px-3 py-2">
-                <!-- 8 ví dụ đa lĩnh vực -->
                 <option value="">— Chọn một ví dụ —</option>
                 <option>AI giúp học sinh tiểu học học Toán nhanh hơn</option>
                 <option>9 chiến thuật kể chuyện giúp video YouTube tăng giữ chân</option>
@@ -63,14 +63,13 @@
               <button id="applyTopicPreset" class="px-3 py-2 rounded-xl border border-slate-300 text-sm hover:bg-slate-50 w-full">Dùng mẫu chủ đề</button>
             </div>
           </div>
-          <div class="text-xs text-slate-500 mt-2">Chọn từ “Mẫu chủ đề nhanh” để tự động điền – sau đó bạn vẫn có thể chỉnh sửa.</div>
+          <div class="text-xs text-slate-500 mt-2">Chọn từ “Mẫu chủ đề nhanh” để tự động điền – nội dung gợi ý phía dưới sẽ đồng bộ theo lĩnh vực.</div>
         </label>
 
         <!-- Đối tượng chính + Mẫu đối tượng nhanh -->
         <label class="block">
           <div class="text-sm font-medium text-slate-700 mb-1">Đối tượng chính</div>
           <select id="audience" class="w-full rounded-xl border border-slate-300 px-3 py-2">
-            <!-- 8 ví dụ đối tượng -->
             <option>Phụ huynh có con cấp 1</option>
             <option>Người mới học AI</option>
             <option>Nhà đầu tư nội dung</option>
@@ -100,7 +99,7 @@
               <button id="applyAudiencePreset" class="px-3 py-2 rounded-xl border border-slate-300 text-sm hover:bg-slate-50 w-full">Dùng mẫu đối tượng</button>
             </div>
           </div>
-          <div class="text-xs text-slate-500 mt-2">Bạn có thể chọn nhanh “Mẫu đối tượng” rồi vẫn chỉnh sửa trực tiếp.</div>
+          <div class="text-xs text-slate-500 mt-2">Chọn nhanh “Mẫu đối tượng” – nội dung bằng chứng, CTA sẽ tự điều chỉnh phù hợp nhóm người xem.</div>
         </label>
 
         <label class="block">
@@ -141,19 +140,20 @@
 
       <div id="chips" class="flex flex-wrap gap-2 items-center text-sm"></div>
 
-      <div class="mt-6">
+      <div class="mt-6 flex gap-2 flex-wrap">
         <button id="generateBtn" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm hover:opacity-90">Tạo gợi ý 9 chiến thuật</button>
+        <button id="randomBtn" class="px-4 py-2 rounded-xl border text-sm hover:bg-slate-50">Random chủ đề & đối tượng</button>
       </div>
     </section>
 
     <!-- Results -->
     <div id="results" class="space-y-6"></div>
 
-    <footer class="text-center text-xs text-slate-500 pt-6 pb-12">StoryFlow 9 • Kallaway-inspired • HTML + Tailwind + Vanilla JS</footer>
+    <footer class="text-center text-xs text-slate-500 pt-6 pb-12">StoryFlow 9 • Kallaway-inspired • HTML + Tailwind + Vanilla JS • Context-Aware</footer>
   </main>
 
   <script>
-    // --- Helpers & Presets ---
+    // ====== Helpers & Presets ======
     const $ = (id) => document.getElementById(id);
 
     const topicExamples = [
@@ -170,12 +170,12 @@
     const audienceExamples = [
       "Phụ huynh có con cấp 1",
       "Người mới học AI",
+      "Nhà đầu tư nội dung",
+      "Học sinh THCS",
       "Nhà đầu tư chứng khoán cá nhân",
       "Khách hàng bất động sản Quy Nhơn",
-      "Chủ trang trại/nhà máy cần HDPE",
-      "Doanh nhân trẻ 20–35 tuổi",
-      "Phụ huynh quan tâm an toàn số cho con",
-      "Người thực hành chánh niệm"
+      "Khách hàng cần giải pháp màng chống thấm HDPE",
+      "Người quan tâm phát triển bản thân & Phật pháp"
     ];
 
     const platformSpecs = {
@@ -185,21 +185,21 @@
       pod: { label: "Podcast video (15–30p)", switchSec: 6 },
     };
 
-    function sentence(s) {
+    const sentence = (s) => {
       const t = (s || "").trim();
       if (!t) return "";
       const last = t.slice(-1);
       return ".!?".includes(last) ? t : t + ".";
-    }
+    };
 
-    function makeChip(text) {
+    const makeChip = (text) => {
       const span = document.createElement("span");
       span.className = "inline-flex items-center rounded-full border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 bg-white";
       span.textContent = text;
       return span;
-    }
+    };
 
-    function sectionCard({badge, title, html}) {
+    const sectionCard = ({badge, title, html}) => {
       const wrap = document.createElement("section");
       wrap.className = "bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 fade-in";
       wrap.innerHTML = `
@@ -210,80 +210,259 @@
         <div class="prose prose-slate max-w-none text-sm md:text-base">${html}</div>
       `;
       return wrap;
+    };
+
+    const ul = (items) => `<ul>${items.map(t => `<li>${t}</li>`).join("")}</ul>`;
+
+    // ====== Domain Packs (Topic) ======
+    function topicPack(topic) {
+      const t = topic.toLowerCase();
+
+      // AI học sinh
+      if (t.includes("ai") && (t.includes("học sinh") || t.includes("toán") || t.includes("tiểu học"))) {
+        return {
+          metaphors: [
+            "AI như ‘gia sư vô hình’ 24/7 – luôn sẵn sàng khi con cần",
+            "Bản đồ học tập: mục tiêu → lộ trình → phản hồi tức thì",
+            "Thang máy năng lực: bước vào là tăng tốc, nhưng vẫn phải ‘bấm tầng đúng’"
+          ],
+          proof: ["Video con làm bài với ChatGPT", "Ảnh điểm số trước/sau", "Nhật ký học 7 ngày", "Feedback của phụ huynh/giáo viên"],
+          broll: ["Bé gõ ChatGPT", "Cận cảnh bài Toán được giải từng bước", "Biểu đồ tiến bộ 1 tuần", "Khoảnh khắc bé ‘Wow!’"],
+          thumb: ["AI LÀ GIA SƯ?", "Điểm +3 Tuần!", "Học Nhanh Gấp 3"],
+          outlineSteps: ["Chọn dạng bài", "Nhập câu hỏi tốt", "Kiểm chứng – luyện biến thể"]
+        };
+      }
+
+      // HDPE
+      if (t.includes("hdpe") || t.includes("lót hồ") || t.includes("chống rò rỉ")) {
+        return {
+          metaphors: [
+            "HDPE như ‘áo giáp’ chống rò rỉ cho hồ", 
+            "Tiền thất thoát như nước qua kẽ nứt – HDPE là nút chặn",
+            "‘Bảo hiểm môi trường’ – trả phí một lần, yên tâm nhiều năm"
+          ],
+          proof: ["Ảnh công trình trước/sau", "Clip test mối hàn", "Bảng chi phí tiết kiệm/năm", "Ý kiến kỹ sư giám sát"],
+          broll: ["Cắt – trải – hàn màng", "Test mối hàn chồng mí", "Đồng hồ lưu lượng rò rỉ = 0", "Toàn cảnh hồ sau 3–6 tháng"],
+          thumb: ["HỒ KHÔNG RÒ RỈ", "TIẾT KIỆM 30%", "BỀN 10–15 NĂM"],
+          outlineSteps: ["Khảo sát & đo đạc", "Chuẩn bị nền", "Trải & hàn", "Nghiệm thu & bảo trì"]
+        };
+      }
+
+      // Luật đất đai
+      if (t.includes("luật đất") || t.includes("sổ") || t.includes("cấp sổ") || t.includes("giấy chứng nhận")) {
+        return {
+          metaphors: [
+            "Checklist pháp lý như ‘bản đồ kho báu’ – thiếu mảnh nào là lạc",
+            "Hồ sơ như ‘bộ puzzle’ – đặt đúng vị trí là khớp ngay",
+            "Hành trình 5 trạm – nộp → kiểm → bổ sung → phê → nhận"
+          ],
+          proof: ["Mẫu đơn & tờ khai", "Minh họa timeline xử lý", "Biên nhận hồ sơ", "Case thực tế tại địa phương"],
+          broll: ["Chụp hồ sơ mẫu", "Giao diện Cổng DVCQG", "Phiếu tiếp nhận", "Quy trình xử lý trên bảng"],
+          thumb: ["CẤP SỔ DỄ", "5 BƯỚC GỌN", "KHÔNG LẠC HỒ SƠ"],
+          outlineSteps: ["Điều kiện", "Hồ sơ", "Cách nộp", "Lệ phí", "Theo dõi & nhận"]
+        };
+      }
+
+      // Chứng khoán / VNIndex & Elliott
+      if (t.includes("vnindex") || t.includes("elliott") || t.includes("chứng khoán")) {
+        return {
+          metaphors: [
+            "Sóng Elliott như ‘nhịp tim’ thị trường – khỏe/yếu nhìn nhịp",
+            "Fibo là ‘thước đo’ nhịp thở của giá",
+            "Kịch bản A/B như bản đồ 2 lối rẽ – chuẩn bị trước khi tới ngã ba"
+          ],
+          proof: ["Biểu đồ có đánh sóng", "Fibo retracement các mốc", "Backtest 30–90 ngày", "Nhật ký giao dịch"],
+          broll: ["Zoom chart Daily/Weekly", "Đánh dấu sóng 1–5/ABC", "Bảng mức Fibo 0.382–0.618", "So sánh 2 kịch bản"],
+          thumb: ["SÓNG LÊN?", "FIBO 0.5?", "2 KỊCH BẢN"],
+          outlineSteps: ["Khung thời gian", "Đánh số sóng", "Mốc Fibo", "Kịch bản & quản trị rủi ro"]
+        };
+      }
+
+      // Branding / Trump
+      if (t.includes("trump") || t.includes("brand") || t.includes("thương hiệu")) {
+        return {
+          metaphors: [
+            "Thương hiệu như ‘định giá cổ phiếu cá nhân’ – kỳ vọng tạo giá",
+            "Tiếng vang truyền thông là ‘đòn bẩy’ tăng định giá",
+            "Tài sản biểu tượng (signature) như logo sống"
+          ],
+          proof: ["Case PR/earned media", "KPI reach/engagement", "So sánh trước/sau rebranding", "Câu chuyện báo chí lớn"],
+          broll: ["Tiêu đề báo chí", "Đồ thị tìm kiếm Google Trends", "Cảnh sự kiện/đấu giá", "Bộ nhận diện/thẻ tên"],
+          thumb: ["TÊN = TIỀN?", "ĐỊNH GIÁ BẢN THÂN", "TRUYỀN THÔNG 4D"],
+          outlineSteps: ["Tuyên ngôn thương hiệu", "Tài sản biểu tượng", "Chiến lược truyền thông", "Thước đo & tối ưu"]
+        };
+      }
+
+      // Phật pháp ứng dụng
+      if (t.includes("phật") || t.includes("chánh niệm") || t.includes("giảm căng thẳng")) {
+        return {
+          metaphors: [
+            "Tâm như mặt hồ – động vì gió vọng tưởng",
+            "Hơi thở là sợi dây kéo ta về hiện tại",
+            "Thói quen như giọt nước – từng giọt thành hồ an ổn"
+          ],
+          proof: ["Nhật ký hành thiền 7–14 ngày", "Thang điểm căng thẳng trước/sau", "Chia sẻ chuyển hóa cá nhân", "Trích dẫn/kinh nghiệm của Thầy"],
+          broll: ["Cảnh thở chậm", "Ánh sáng bình minh", "Viết nhật ký 3 dòng", "Nụ cười thư thái"],
+          thumb: ["TĨNH 5 PHÚT", "HƠI THỞ CHỮA LÀNH", "HẠ CĂNG THẲNG"],
+          outlineSteps: ["Thực tập 3-3-3", "Quán chiếu 1 điều", "Hành động nhỏ nuôi dưỡng"]
+        };
+      }
+
+      // BĐS Quy Nhơn
+      if (t.includes("quy nhơn") || t.includes("căn hộ") || t.includes("real estate")) {
+        return {
+          metaphors: [
+            "Mua nhà như ‘chọn tổ ấm’ – 7 tiêu chí là khung xương",
+            "Vị trí là ‘trục xương sống’ – còn lại là cơ bắp",
+            "Pháp lý là ‘lá chắn’ – an cư mới lạc nghiệp"
+          ],
+          proof: ["So sánh dự án A/B/C", "Bảng pháp lý từng dự án", "Giá/tiện ích/tiến độ", "Feedback cư dân/khách đã mua"],
+          broll: ["Flycam vị trí", "Interior tour căn mẫu", "Bảng tiện ích dự án", "Bản đồ kết nối hạ tầng"],
+          thumb: ["CHỌN ĐÚNG NHÀ", "7 TIÊU CHÍ VÀNG", "PHÁP LÝ AN TÂM"],
+          outlineSteps: ["Vị trí – kết nối", "Pháp lý – uy tín CĐT", "Tiện ích – cộng đồng", "Giá – tiến độ – tiềm năng"]
+        };
+      }
+
+      // Mặc định (YouTube storytelling)
+      return {
+        metaphors: [
+          "Câu chuyện là ‘chiếc cầu’ nối ý tưởng với cảm xúc",
+          "Nhịp hình như ‘trống trận’ – giữ đội hình không rã",
+          "Giá trị đầu video là ‘vé vào cửa’ cho phần sau"
+        ],
+        proof: ["Ví dụ kênh tương tự", "Biểu đồ retention", "A/B test hook", "Case học viên/khán giả"],
+        broll: ["Màn hình video/analytics", "Góc quay mặt/over-shoulder", "Text động nhấn ý", "Cut-in cảm xúc"],
+        thumb: ["HOOK TỐT = WIN", "GIỮ CHÂN 50%+", "9 VŨ KHÍ"],
+        outlineSteps: ["Hook", "Bối cảnh", "Nguyên lý", "Minh họa", "CTA"]
+      };
     }
 
+    // ====== Audience Profiles ======
+    function audienceProfile(aud) {
+      const a = aud.toLowerCase();
+
+      if (a.includes("phụ huynh")) return {
+        style: "Dễ hiểu, ấm áp, an toàn cho trẻ",
+        preferProof: ["Feedback giáo viên", "Tiến bộ điểm số", "Lịch học/lịch ngủ cân bằng"],
+        cta: "Comment tuổi và lớp của con – nhận checklist áp dụng ngay hôm nay."
+      };
+      if (a.includes("chứng khoán")) return {
+        style: "Trực diện, số liệu rõ, quản trị rủi ro",
+        preferProof: ["Chart đánh dấu điểm vào/ra", "Risk:Reward ≥ 1:2", "Backtest 30–90 ngày"],
+        cta: "Comment mã quan tâm – mình gửi template kịch bản & quản trị rủi ro."
+      };
+      if (a.includes("bất động sản")) return {
+        style: "Cụ thể, pháp lý trước – cảm xúc sau",
+        preferProof: ["Sổ mẫu/giấy tờ pháp lý", "Giá/tiến độ", "So sánh dự án lân cận"],
+        cta: "Để lại khu vực & ngân sách – mình gửi bảng so sánh 3 dự án phù hợp."
+      };
+      if (a.includes("hdpe") || a.includes("trang trại") || a.includes("nhà máy")) return {
+        style: "Kỹ thuật rõ – lợi ích tiền + môi trường",
+        preferProof: ["Test mối hàn", "Tính toán tiết kiệm rò rỉ", "Ảnh công trình 3–12 tháng sau"],
+        cta: "Nhập kích thước hồ – mình ước tính chi phí & thời gian thi công."
+      };
+      if (a.includes("ai") || a.includes("học ai") || a.includes("nhà đầu tư nội dung")) return {
+        style: "Nhanh, demo trực tiếp, có template",
+        preferProof: ["Trước/sau khi dùng tool", "Kết quả retention/CTR", "Checklist quay dựng"],
+        cta: "Gõ từ khóa chủ đề – mình sinh ngay script + checklist quay."
+      };
+      if (a.includes("phật") || a.includes("chánh niệm")) return {
+        style: "Nhẹ nhàng, trải nghiệm thật, không giáo điều",
+        preferProof: ["Nhật ký thực tập", "Chỉ báo giấc ngủ/căng thẳng", "Trích dẫn kinh nghiệm Thầy"],
+        cta: "Comment ‘an’ – mình gửi audio 5 phút thở chánh niệm mỗi ngày."
+      };
+
+      return {
+        style: "Rõ ràng, dễ áp dụng, có ví dụ",
+        preferProof: ["Ví dụ thực tế", "Minh họa trực quan", "Checklist hành động"],
+        cta: "Comment ‘template’ – mình gửi file mẫu để bạn áp dụng."
+      };
+    }
+
+    // ====== Engine (build content with Packs) ======
     function buildEngine(input) {
-      const { topic, audience, goal, platform, tone } = input;
+      const { topic, audience, goal, platform, tone, proofAssets } = input;
       const p = platformSpecs[platform] || platformSpecs.shorts;
       const switchEvery = p.switchSec;
 
+      const tPack = topicPack(topic);
+      const aProf = audienceProfile(audience);
+
+      // Merge proof assets: custom > audience-prefer > topic-pack default
+      let mergedProof = [];
+      const userProof = (proofAssets || "").split(/,\s*/g).filter(Boolean);
+      if (userProof.length) mergedProof = userProof;
+      else mergedProof = (aProf.preferProof || []).concat(tPack.proof || []);
+
+      // 1) Comprehension Maxing
       const compMax = {
         speak: [
           `Trong video hôm nay, chúng ta sẽ nói về: ${topic}`,
-          `Mục tiêu: ${goal || "giúp khán giả áp dụng được ngay"}`
+          `Mục tiêu: ${goal || "giúp khán giả áp dụng được ngay"}`,
+          `Phong cách trình bày: ${aProf.style}`
         ].map(sentence),
         visuals: [
-          `Khung mở: text động trên màn hình hiển thị chủ đề "${topic}"`,
-          "Cut-in: ví dụ thực tế 3–5 giây minh họa vấn đề",
-          "Overlay từ khóa chính bám theo lời nói (2–4 từ/slide)"
+          `Text mở nêu chủ đề "${topic}" + phụ đề 2–4 từ mỗi ý`,
+          "Ví dụ thực tế 3–5 giây minh họa vấn đề",
+          "Overlay từ khóa chính khớp lời nói (2–4 từ)"
         ]
       };
 
+      // 2) Hawkeye Narrative
       const hawkeye = {
         openContext: sentence(`Vấn đề lớn của ${audience}: vì sao ${topic.toLowerCase()} lại quan trọng?`),
         deepen: [
-          "Phần 1 – Bối cảnh rộng: dữ liệu/quan sát phổ quát",
-          "Phần 2 – Nguyên lý/lý thuyết cốt lõi",
-          "Phần 3 – Ví dụ cụ thể và cách làm từng bước"
+          "Bối cảnh rộng: dữ liệu/quan sát phổ quát trong lĩnh vực",
+          "Nguyên lý/lý thuyết cốt lõi (đơn giản hóa)",
+          "Ví dụ cụ thể & cách làm từng bước theo chủ đề"
         ].map(sentence)
       };
 
-      const metaphors = [
-        `${topic} giống như một “gia sư vô hình” luôn trực 24/7`,
-        "Dòng chảy câu chuyện như thủy triều: lên – căng – xả – lắng",
-        "Bản đồ trước – đường đi sau: có map rồi mới lái xe"
+      // 3) Metaphors
+      const metaphors = tPack.metaphors || [
+        "Ẩn dụ chung: câu chuyện là cây cầu nối ý tưởng với cảm xúc"
       ];
 
+      // 4) Common Ground
       const commonGround = {
-        opener: sentence("Tôi từng ở vị trí của bạn: hoang mang, sợ con nghiện màn hình, và không biết bắt đầu từ đâu."),
-        we: sentence("Nhưng khi chúng ta thử một cách tiếp cận mới, mọi thứ bắt đầu thay đổi."),
-        ref: sentence("Những ví dụ đời thực ngay sau đây sẽ giúp chúng ta thấy rõ.")
+        opener: sentence("Tôi từng ở vị trí của bạn: phân vân, sợ sai, và không biết bắt đầu từ đâu."),
+        we: sentence("Khi chúng ta thử một cách tiếp cận mới, mọi thứ bắt đầu thay đổi."),
+        ref: sentence("Ngay sau đây là ví dụ đời thực – bám theo chủ đề và nhóm người xem này.")
       };
 
+      // 5) Simplify
       const simplify = [
-        "Chia nhỏ khái niệm thành 3 ý cốt lõi, mỗi ý ≤ 1 câu ngắn",
-        "Tránh thuật ngữ – nếu buộc dùng, luôn kèm ví dụ",
-        "Dùng câu chủ động, động từ mạnh, số liệu tròn dễ nhớ"
+        "Chia nội dung thành 3 ý cốt lõi, mỗi ý ≤ 1 câu ngắn",
+        "Tránh thuật ngữ – nếu buộc dùng, luôn kèm ví dụ bám sát chủ đề",
+        "Câu chủ động, động từ mạnh, số liệu tròn dễ nhớ"
       ];
 
+      // 6) Visual Stun
       const visualStun = {
         cadence: sentence(`Đổi khung hình mỗi ${switchEvery} giây (cận/medium/toàn, text, b-roll, màn hình demo).`),
         edits: [
-          "Nhảy cắt theo ý (jump cut) để nhấn nhịp tư duy",
-          "Slow Zoom 5–8% trên đoạn giải thích quan trọng",
-          "Insert b-roll minh họa ví dụ trước – sau"
+          "Jump cut theo mạch ý để giữ nhịp",
+          "Slow Zoom 5–8% cho phần giải thích quan trọng",
+          `Insert b-roll chuyên biệt lĩnh vực: ${ (tPack.broll||[]).slice(0,3).join(", ") }`
         ]
       };
 
+      // 7) Value Compression
       const valueCompression = {
         first10s: [
           "Nói lợi ích lớn nhất ngay 5–10 giây đầu",
           "Hiển thị kết quả/cuối đường trước, hành trình sau"
         ].map(sentence),
-        sample: sentence(`“Chỉ một thay đổi nhỏ hôm nay, ${audience.toLowerCase()} sẽ thấy kết quả ngay tuần này.”`)
+        sample: sentence(`“Chỉ một thay đổi nhỏ hôm nay, ${audience.toLowerCase()} sẽ thấy kết quả trong tuần này.”`)
       };
 
-      const proofAssets = (input.proofAssets || "")
-        .split(/,\s*/g)
-        .filter(Boolean)
-        .length ? input.proofAssets.split(/,\s*/g).filter(Boolean)
-                : ["Ảnh trước/sau", "Feedback khách hàng", "Clip thực hành", "Số liệu tiến bộ"];
-
+      // 8) Proof
       const proof = {
-        copy: sentence("Đưa bằng chứng thật để tắt ‘máy dò BS’: ảnh, video, số liệu, hóa đơn, case study."),
-        assets: proofAssets
+        copy: sentence("Đưa bằng chứng thật để tắt ‘máy dò BS’: ảnh/video/số liệu/case study."),
+        assets: mergedProof
       };
 
+      // 9) Contrast
       const contrast = {
         template: sentence("Kỳ vọng → Bẻ ngoặt → Giải thích tại sao → Lợi ích bất ngờ"),
         hooks: [
@@ -293,40 +472,28 @@
         ]
       };
 
+      // Outline (domain-specific)
       const outline = [
         { part: "Hook (0–10s)", content: [valueCompression.sample, contrast.hooks[1], compMax.speak[0]] },
         { part: "Bối cảnh (10–30s)", content: [hawkeye.openContext, commonGround.opener] },
-        { part: "Nguyên lý (30–60s)", content: [metaphors[0], simplify[0]] },
-        { part: "Cách làm (1–3p)", content: ["Bước 1: …", "Bước 2: …", "Bước 3: …"] },
+        { part: "Nguyên lý (30–60s)", content: [metaphors[0] || "", simplify[0]] },
+        { part: "Cách làm (1–3p)", content: (tPack.outlineSteps || ["Bước 1", "Bước 2", "Bước 3"]).map(s=>s) },
         { part: "Bằng chứng (đan xen)", content: proof.assets },
-        { part: "Kết thúc/CTA", content: ["Bạn sẽ thử điều gì ngay hôm nay?", "Comment từ khóa để nhận template miễn phí."] }
+        { part: "Kết thúc/CTA", content: [aProf.cta] }
       ];
 
-      const thumb = [
-        "Tiêu đề 3–5 từ mạnh: ‘AI LÀ GIA SƯ?’",
-        "Ảnh chính: gương mặt cảm xúc + vật thể ẩn dụ (đèn bàn, sách mở)",
-        "Chữ bổ trợ 2–3 từ: ‘Nhanh Gấp 3’"
-      ];
+      // Visual helpers
+      const thumb = tPack.thumb || ["HOOK MẠNH", "GIỮ CHÂN 50%+", "9 VŨ KHÍ"];
+      const broll = tPack.broll || ["Màn hình minh họa", "Text nhấn ý", "Cận biểu cảm"];
 
-      const broll = [
-        "Bé học cùng laptop/ChatGPT",
-        "Close-up tay gõ bàn phím",
-        "Biểu đồ trước/sau",
-        "Giấy khen/điểm số"
-      ];
-
-      return { compMax, hawkeye, metaphors, commonGround, simplify, visualStun, valueCompression, proof, contrast, outline, thumb, broll, switchEvery, p, tone, topic, audience, goal };
+      return { compMax, hawkeye, metaphors, commonGround, simplify, visualStun, valueCompression, proof, contrast, outline, thumb, broll, switchEvery, p, tone, topic, audience, goal, audienceStyle: aProf.style };
     }
 
-    function ul(items) {
-      return `<ul>${items.map(t => `<li>${t}</li>`).join("")}</ul>`;
-    }
-
+    // ====== Render ======
     function renderAll(engine) {
       const out = $("results");
       out.innerHTML = "";
 
-      // Chips row
       const chips = $("chips");
       chips.innerHTML = "";
       chips.appendChild(makeChip("Chủ đề: " + engine.topic));
@@ -335,42 +502,42 @@
       chips.appendChild(makeChip("Nền tảng: " + engine.p.label));
       chips.appendChild(makeChip("Tông giọng: " + engine.tone));
       chips.appendChild(makeChip("Đổi khung hình mỗi " + engine.switchEvery + "s"));
+      chips.appendChild(makeChip("Phong cách: " + engine.audienceStyle));
 
-      // Sections
-      const sectionCardEl = (badge, title, html) => sectionCard({ badge, title, html });
+      const section = (b,t,h) => out.appendChild(sectionCard({badge:b,title:t,html:h}));
 
-      out.appendChild(sectionCardEl("1", "Comprehension Maxing – Ghép lời nói với hình ảnh",
+      section("1","Comprehension Maxing – Ghép lời nói với hình ảnh",
         `<p class="font-medium">Lời thoại gợi ý:</p>${ul(engine.compMax.speak.map(s=>"🗣️ "+s))}
          <div class="h-px bg-slate-200 my-4"></div>
-         <p class="font-medium">Hình ảnh gợi ý:</p>${ul(engine.compMax.visuals.map(v=>"🎞️ "+v))}`));
+         <p class="font-medium">Hình ảnh gợi ý:</p>${ul(engine.compMax.visuals.map(v=>"🎞️ "+v))}`);
 
-      out.appendChild(sectionCardEl("2", "Hawkeye Narrative – Từ tổng thể đến chi tiết",
-        `<p>${engine.hawkeye.openContext}</p><div class="mt-3">${ul(engine.hawkeye.deepen)}</div>`));
+      section("2","Hawkeye Narrative – Từ tổng thể đến chi tiết",
+        `<p>${engine.hawkeye.openContext}</p><div class="mt-3">${ul(engine.hawkeye.deepen)}</div>`);
 
-      out.appendChild(sectionCardEl("3", "Visual Examples & Metaphors – Ẩn dụ trực quan",
-        ul(engine.metaphors.map(m=>"💡 "+m))));
+      section("3","Visual Examples & Metaphors – Ẩn dụ trực quan",
+        ul(engine.metaphors.map(m=>"💡 "+m)));
 
-      out.appendChild(sectionCardEl("4", "Common Ground – Điểm chung với khán giả",
-        `<p>${engine.commonGround.opener}</p><p>${engine.commonGround.we}</p><p>${engine.commonGround.ref}</p>`));
+      section("4","Common Ground – Điểm chung với khán giả",
+        `<p>${engine.commonGround.opener}</p><p>${engine.commonGround.we}</p><p>${engine.commonGround.ref}</p>`);
 
-      out.appendChild(sectionCardEl("5", "Simpler Words & Ideas – Ngắn gọn và dễ hiểu",
-        ul(engine.simplify.map(s=>"✏️ "+s))));
+      section("5","Simpler Words & Ideas – Ngắn gọn và dễ hiểu",
+        ul(engine.simplify.map(s=>"✏️ "+s)));
 
-      out.appendChild(sectionCardEl("6", "Visual Stun Gun – Nhịp hình giữ chú ý",
-        `<p>${engine.visualStun.cadence}</p><div class="mt-2">${ul(engine.visualStun.edits.map(e=>"🎬 "+e))}</div>`));
+      section("6","Visual Stun Gun – Nhịp hình giữ chú ý",
+        `<p>${engine.visualStun.cadence}</p><div class="mt-2">${ul(engine.visualStun.edits.map(e=>"🎬 "+e))}</div>`);
 
-      out.appendChild(sectionCardEl("7", "Value Compression – Nén giá trị lên đầu",
+      section("7","Value Compression – Nén giá trị lên đầu",
         `<p class="font-medium">Trong 10 giây đầu:</p>${ul(engine.valueCompression.first10s.map(v=>"⚡ "+v))}
-         <p class="mt-2">Câu mẫu: <span class="font-semibold">${engine.valueCompression.sample}</span></p>`));
+         <p class="mt-2">Câu mẫu: <span class="font-semibold">${engine.valueCompression.sample}</span></p>`);
 
-      out.appendChild(sectionCardEl("8", "Come With Proof – Đưa bằng chứng thật",
-        `<p>${engine.proof.copy}</p><div class="mt-2">${ul(engine.proof.assets.map(a=>"📎 "+a))}</div>`));
+      section("8","Come With Proof – Đưa bằng chứng thật",
+        `<p>${engine.proof.copy}</p><div class="mt-2">${ul(engine.proof.assets.map(a=>"📎 "+a))}</div>`);
 
-      out.appendChild(sectionCardEl("9", "Set Up Contrast – Tạo tương phản & bất ngờ",
+      section("9","Set Up Contrast – Tạo tương phản & bất ngờ",
         `<p>Mẫu cấu trúc: ${engine.contrast.template}</p>
          <div class="flex flex-wrap gap-2 mt-3">
            ${engine.contrast.hooks.map(h=>`<span class="px-2 py-1 rounded-full bg-slate-100 text-slate-700 text-xs border border-slate-200">${h}</span>`).join("")}
-         </div>`));
+         </div>`);
 
       // Outline
       const rows = engine.outline.map(row => `
@@ -379,8 +546,7 @@
           <td class="align-top p-3 border-b">${ul(row.content)}</td>
         </tr>
       `).join("");
-
-      out.appendChild(sectionCardEl("📜", "Tóm tắt kịch bản đề xuất",
+      section("📜","Tóm tắt kịch bản đề xuất",
         `<div class="overflow-x-auto">
            <table class="w-full text-sm border border-slate-200 rounded-xl overflow-hidden">
              <thead class="bg-slate-50">
@@ -388,32 +554,22 @@
              </thead>
              <tbody>${rows}</tbody>
            </table>
-         </div>`));
+         </div>`);
 
       // Thumb & B-roll
-      out.appendChild(sectionCardEl("🖼️","Gợi ý Thumbnail", ul([
-        "Tiêu đề 3–5 từ mạnh: ‘AI LÀ GIA SƯ?’",
-        "Ảnh chính: gương mặt cảm xúc + vật thể ẩn dụ (đèn bàn, sách mở)",
-        "Chữ bổ trợ 2–3 từ: ‘Nhanh Gấp 3’"
-      ])));
-      out.appendChild(sectionCardEl("🎞️","Danh sách B-roll đề xuất", ul([
-        "Bé học cùng laptop/ChatGPT",
-        "Close-up tay gõ bàn phím",
-        "Biểu đồ trước/sau",
-        "Giấy khen/điểm số"
-      ])));
+      section("🖼️","Gợi ý Thumbnail", ul(engine.thumb));
+      section("🎞️","Danh sách B-roll đề xuất", ul(engine.broll));
 
       // Openers by tone
-      out.appendChild(sectionCardEl("🎙️","Gợi ý lời thoại mở đầu (theo tông giọng)",
+      section("🎙️","Gợi ý lời thoại mở đầu (theo tông giọng)",
         ul([
           `<b>Hook tương phản:</b> "Tôi từng nghĩ ${engine.topic.toLowerCase()} là ý tưởng tệ — cho đến khi thấy kết quả."`,
           `<b>Giá trị tức thì:</b> "Trong 60 giây, bạn sẽ có 3 bước để ${engine.goal}."`,
           `<b>Bằng chứng lồng ghép:</b> "Đây là minh chứng thật từ ${engine.audience.toLowerCase()} tuần trước."`
-        ])
-      ));
+        ]));
     }
 
-    // --- Initial values & events ---
+    // ====== IO & Events ======
     const defaults = {
       topic: topicExamples[0],
       audience: audienceExamples[0],
@@ -430,7 +586,6 @@
       $("platform").value = defaults.platform;
       $("tone").value = defaults.tone;
       $("proofAssets").value = defaults.proofAssets;
-      // Fill preset dropdown defaults
       $("topicPreset").value = "";
       $("audiencePreset").value = "";
     }
@@ -446,13 +601,6 @@
       };
     }
 
-    function makeChip(text) {
-      const span = document.createElement("span");
-      span.className = "inline-flex items-center rounded-full border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 bg-white";
-      span.textContent = text;
-      return span;
-    }
-
     async function copyJson() {
       const input = readInput();
       const data = buildEngine(input);
@@ -461,6 +609,7 @@
       alert("Đã sao chép cấu hình + gợi ý ra clipboard!");
     }
 
+    // Buttons
     $("generateBtn").addEventListener("click", () => {
       const engine = buildEngine(readInput());
       renderAll(engine);
@@ -475,14 +624,21 @@
 
     $("copyJsonBtn").addEventListener("click", copyJson);
 
-    // Preset apply handlers
     $("applyTopicPreset").addEventListener("click", () => {
       const val = $("topicPreset").value;
       if (val) $("topic").value = val;
     });
+
     $("applyAudiencePreset").addEventListener("click", () => {
       const val = $("audiencePreset").value;
       if (val) $("audience").value = val;
+    });
+
+    $("randomBtn").addEventListener("click", () => {
+      const t = topicExamples[Math.floor(Math.random()*topicExamples.length)];
+      const a = audienceExamples[Math.floor(Math.random()*audienceExamples.length)];
+      $("topic").value = t;
+      $("audience").value = a;
     });
 
     // Boot
