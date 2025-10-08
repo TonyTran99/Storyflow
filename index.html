@@ -25,7 +25,7 @@
       </div>
       <div class="flex items-center gap-2">
         <button id="copyJsonBtn" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white text-sm hover:opacity-90">Sao chép JSON</button>
-        <button id="resetBtn" class="px-3 py-1.5 rounded-lg border text-sm">Reset</button>
+        <button id="resetBtn" className="px-3 py-1.5 rounded-lg border text-sm">Reset</button>
       </div>
     </div>
   </header>
@@ -39,21 +39,68 @@
       </div>
 
       <div class="grid md:grid-cols-2 gap-5">
+        <!-- Chủ đề video + Mẫu chủ đề nhanh -->
         <label class="block">
           <div class="text-sm font-medium text-slate-700 mb-1">Chủ đề video</div>
           <input id="topic" class="w-full rounded-xl border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-300" placeholder="AI giúp học sinh tiểu học học Toán nhanh hơn"/>
-          <div class="text-xs text-slate-500 mt-1">Ví dụ: “AI giúp học sinh tiểu học học Toán nhanh hơn”</div>
+          <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="block">
+              <div class="text-xs font-medium text-slate-600 mb-1">Mẫu chủ đề nhanh</div>
+              <select id="topicPreset" class="w-full rounded-xl border border-slate-300 px-3 py-2">
+                <!-- 8 ví dụ đa lĩnh vực -->
+                <option value="">— Chọn một ví dụ —</option>
+                <option>AI giúp học sinh tiểu học học Toán nhanh hơn</option>
+                <option>9 chiến thuật kể chuyện giúp video YouTube tăng giữ chân</option>
+                <option>HDPE: Lót hồ tưới tiết kiệm chi phí và chống rò rỉ</option>
+                <option>Luật Đất đai 2024: 5 bước xin cấp sổ lần đầu dễ hiểu</option>
+                <option>VNIndex & sóng Elliott: Hai kịch bản 30 ngày tới</option>
+                <option>Trump Brand: Tên tuổi đáng giá hơn vàng?</option>
+                <option>Phật pháp ứng dụng: 3 thói quen giảm căng thẳng mỗi ngày</option>
+                <option>Real Estate Quy Nhơn: Chọn căn hộ theo 7 tiêu chí cốt lõi</option>
+              </select>
+            </label>
+            <div class="flex items-end">
+              <button id="applyTopicPreset" class="px-3 py-2 rounded-xl border border-slate-300 text-sm hover:bg-slate-50 w-full">Dùng mẫu chủ đề</button>
+            </div>
+          </div>
+          <div class="text-xs text-slate-500 mt-2">Chọn từ “Mẫu chủ đề nhanh” để tự động điền – sau đó bạn vẫn có thể chỉnh sửa.</div>
         </label>
 
+        <!-- Đối tượng chính + Mẫu đối tượng nhanh -->
         <label class="block">
           <div class="text-sm font-medium text-slate-700 mb-1">Đối tượng chính</div>
           <select id="audience" class="w-full rounded-xl border border-slate-300 px-3 py-2">
+            <!-- 8 ví dụ đối tượng -->
             <option>Phụ huynh có con cấp 1</option>
             <option>Người mới học AI</option>
             <option>Nhà đầu tư nội dung</option>
             <option>Học sinh THCS</option>
-            <option>Người yêu phát triển bản thân</option>
+            <option>Nhà đầu tư chứng khoán cá nhân</option>
+            <option>Khách hàng bất động sản Quy Nhơn</option>
+            <option>Khách hàng cần giải pháp màng chống thấm HDPE</option>
+            <option>Người quan tâm phát triển bản thân & Phật pháp</option>
           </select>
+
+          <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="block">
+              <div class="text-xs font-medium text-slate-600 mb-1">Mẫu đối tượng nhanh</div>
+              <select id="audiencePreset" class="w-full rounded-xl border border-slate-300 px-3 py-2">
+                <option value="">— Chọn một ví dụ —</option>
+                <option>Phụ huynh có con cấp 1</option>
+                <option>Người mới học AI</option>
+                <option>Nhà đầu tư chứng khoán cá nhân</option>
+                <option>Khách hàng bất động sản Quy Nhơn</option>
+                <option>Chủ trang trại/nhà máy cần HDPE</option>
+                <option>Doanh nhân trẻ 20–35 tuổi</option>
+                <option>Phụ huynh quan tâm an toàn số cho con</option>
+                <option>Người thực hành chánh niệm</option>
+              </select>
+            </label>
+            <div class="flex items-end">
+              <button id="applyAudiencePreset" class="px-3 py-2 rounded-xl border border-slate-300 text-sm hover:bg-slate-50 w-full">Dùng mẫu đối tượng</button>
+            </div>
+          </div>
+          <div class="text-xs text-slate-500 mt-2">Bạn có thể chọn nhanh “Mẫu đối tượng” rồi vẫn chỉnh sửa trực tiếp.</div>
         </label>
 
         <label class="block">
@@ -106,8 +153,31 @@
   </main>
 
   <script>
-    // --- Helpers ---
+    // --- Helpers & Presets ---
     const $ = (id) => document.getElementById(id);
+
+    const topicExamples = [
+      "AI giúp học sinh tiểu học học Toán nhanh hơn",
+      "9 chiến thuật kể chuyện giúp video YouTube tăng giữ chân",
+      "HDPE: Lót hồ tưới tiết kiệm chi phí và chống rò rỉ",
+      "Luật Đất đai 2024: 5 bước xin cấp sổ lần đầu dễ hiểu",
+      "VNIndex & sóng Elliott: Hai kịch bản 30 ngày tới",
+      "Trump Brand: Tên tuổi đáng giá hơn vàng?",
+      "Phật pháp ứng dụng: 3 thói quen giảm căng thẳng mỗi ngày",
+      "Real Estate Quy Nhơn: Chọn căn hộ theo 7 tiêu chí cốt lõi"
+    ];
+
+    const audienceExamples = [
+      "Phụ huynh có con cấp 1",
+      "Người mới học AI",
+      "Nhà đầu tư chứng khoán cá nhân",
+      "Khách hàng bất động sản Quy Nhơn",
+      "Chủ trang trại/nhà máy cần HDPE",
+      "Doanh nhân trẻ 20–35 tuổi",
+      "Phụ huynh quan tâm an toàn số cho con",
+      "Người thực hành chánh niệm"
+    ];
+
     const platformSpecs = {
       yt:  { label: "YouTube (8–12 phút)", switchSec: 4 },
       shorts: { label: "Shorts/Reels (45–60s)", switchSec: 3 },
@@ -248,9 +318,8 @@
       return { compMax, hawkeye, metaphors, commonGround, simplify, visualStun, valueCompression, proof, contrast, outline, thumb, broll, switchEvery, p, tone, topic, audience, goal };
     }
 
-    function ul(items, icon) {
-      const li = (t) => `<li>${icon ? icon + " " : ""}${t}</li>`;
-      return `<ul>${items.map(li).join("")}</ul>`;
+    function ul(items) {
+      return `<ul>${items.map(t => `<li>${t}</li>`).join("")}</ul>`;
     }
 
     function renderAll(engine) {
@@ -268,147 +337,86 @@
       chips.appendChild(makeChip("Đổi khung hình mỗi " + engine.switchEvery + "s"));
 
       // Sections
-      out.appendChild(sectionCard({
-        badge: "1",
-        title: "Comprehension Maxing – Ghép lời nói với hình ảnh",
-        html: `
-          <p class="font-medium">Lời thoại gợi ý:</p>
-          ${ul(engine.compMax.speak.map(s => "🗣️ " + s))}
-          <div class="h-px bg-slate-200 my-4"></div>
-          <p class="font-medium">Hình ảnh gợi ý:</p>
-          ${ul(engine.compMax.visuals.map(v => "🎞️ " + v))}
-        `
-      }));
+      const sectionCardEl = (badge, title, html) => sectionCard({ badge, title, html });
 
-      out.appendChild(sectionCard({
-        badge: "2",
-        title: "Hawkeye Narrative – Từ tổng thể đến chi tiết",
-        html: `
-          <p>${engine.hawkeye.openContext}</p>
-          <div class="mt-3">${ul(engine.hawkeye.deepen)}</div>
-        `
-      }));
+      out.appendChild(sectionCardEl("1", "Comprehension Maxing – Ghép lời nói với hình ảnh",
+        `<p class="font-medium">Lời thoại gợi ý:</p>${ul(engine.compMax.speak.map(s=>"🗣️ "+s))}
+         <div class="h-px bg-slate-200 my-4"></div>
+         <p class="font-medium">Hình ảnh gợi ý:</p>${ul(engine.compMax.visuals.map(v=>"🎞️ "+v))}`));
 
-      out.appendChild(sectionCard({
-        badge: "3",
-        title: "Visual Examples & Metaphors – Ẩn dụ trực quan",
-        html: ul(engine.metaphors.map(m => "💡 " + m))
-      }));
+      out.appendChild(sectionCardEl("2", "Hawkeye Narrative – Từ tổng thể đến chi tiết",
+        `<p>${engine.hawkeye.openContext}</p><div class="mt-3">${ul(engine.hawkeye.deepen)}</div>`));
 
-      out.appendChild(sectionCard({
-        badge: "4",
-        title: "Common Ground – Điểm chung với khán giả",
-        html: `
-          <p>${engine.commonGround.opener}</p>
-          <p>${engine.commonGround.we}</p>
-          <p>${engine.commonGround.ref}</p>
-        `
-      }));
+      out.appendChild(sectionCardEl("3", "Visual Examples & Metaphors – Ẩn dụ trực quan",
+        ul(engine.metaphors.map(m=>"💡 "+m))));
 
-      out.appendChild(sectionCard({
-        badge: "5",
-        title: "Simpler Words & Ideas – Ngắn gọn và dễ hiểu",
-        html: ul(engine.simplify.map(s => "✏️ " + s))
-      }));
+      out.appendChild(sectionCardEl("4", "Common Ground – Điểm chung với khán giả",
+        `<p>${engine.commonGround.opener}</p><p>${engine.commonGround.we}</p><p>${engine.commonGround.ref}</p>`));
 
-      out.appendChild(sectionCard({
-        badge: "6",
-        title: "Visual Stun Gun – Nhịp hình giữ chú ý",
-        html: `
-          <p>${engine.visualStun.cadence}</p>
-          <div class="mt-2">${ul(engine.visualStun.edits.map(e => "🎬 " + e))}</div>
-        `
-      }));
+      out.appendChild(sectionCardEl("5", "Simpler Words & Ideas – Ngắn gọn và dễ hiểu",
+        ul(engine.simplify.map(s=>"✏️ "+s))));
 
-      out.appendChild(sectionCard({
-        badge: "7",
-        title: "Value Compression – Nén giá trị lên đầu",
-        html: `
-          <p class="font-medium">Trong 10 giây đầu:</p>
-          ${ul(engine.valueCompression.first10s.map(v => "⚡ " + v))}
-          <p class="mt-2">Câu mẫu: <span class="font-semibold">${engine.valueCompression.sample}</span></p>
-        `
-      }));
+      out.appendChild(sectionCardEl("6", "Visual Stun Gun – Nhịp hình giữ chú ý",
+        `<p>${engine.visualStun.cadence}</p><div class="mt-2">${ul(engine.visualStun.edits.map(e=>"🎬 "+e))}</div>`));
 
-      out.appendChild(sectionCard({
-        badge: "8",
-        title: "Come With Proof – Đưa bằng chứng thật",
-        html: `
-          <p>${engine.proof.copy}</p>
-          <div class="mt-2">${ul(engine.proof.assets.map(a => "📎 " + a))}</div>
-        `
-      }));
+      out.appendChild(sectionCardEl("7", "Value Compression – Nén giá trị lên đầu",
+        `<p class="font-medium">Trong 10 giây đầu:</p>${ul(engine.valueCompression.first10s.map(v=>"⚡ "+v))}
+         <p class="mt-2">Câu mẫu: <span class="font-semibold">${engine.valueCompression.sample}</span></p>`));
 
-      out.appendChild(sectionCard({
-        badge: "9",
-        title: "Set Up Contrast – Tạo tương phản & bất ngờ",
-        html: `
-          <p>Mẫu cấu trúc: ${engine.contrast.template}</p>
-          <div class="flex flex-wrap gap-2 mt-3">
-            ${engine.contrast.hooks.map(h => `<span class="px-2 py-1 rounded-full bg-slate-100 text-slate-700 text-xs border border-slate-200">${h}</span>`).join("")}
-          </div>
-        `
-      }));
+      out.appendChild(sectionCardEl("8", "Come With Proof – Đưa bằng chứng thật",
+        `<p>${engine.proof.copy}</p><div class="mt-2">${ul(engine.proof.assets.map(a=>"📎 "+a))}</div>`));
+
+      out.appendChild(sectionCardEl("9", "Set Up Contrast – Tạo tương phản & bất ngờ",
+        `<p>Mẫu cấu trúc: ${engine.contrast.template}</p>
+         <div class="flex flex-wrap gap-2 mt-3">
+           ${engine.contrast.hooks.map(h=>`<span class="px-2 py-1 rounded-full bg-slate-100 text-slate-700 text-xs border border-slate-200">${h}</span>`).join("")}
+         </div>`));
 
       // Outline
       const rows = engine.outline.map(row => `
         <tr class="odd:bg-white even:bg-slate-50">
           <td class="align-top p-3 border-b w-48 font-medium">${row.part}</td>
-          <td class="align-top p-3 border-b">
-            ${ul(row.content)}
-          </td>
+          <td class="align-top p-3 border-b">${ul(row.content)}</td>
         </tr>
       `).join("");
 
-      out.appendChild(sectionCard({
-        badge: "📜",
-        title: "Tóm tắt kịch bản đề xuất",
-        html: `
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm border border-slate-200 rounded-xl overflow-hidden">
-              <thead class="bg-slate-50">
-                <tr>
-                  <th class="text-left p-3 border-b">Phần</th>
-                  <th class="text-left p-3 border-b">Nội dung</th>
-                </tr>
-              </thead>
-              <tbody>${rows}</tbody>
-            </table>
-          </div>
-        `
-      }));
+      out.appendChild(sectionCardEl("📜", "Tóm tắt kịch bản đề xuất",
+        `<div class="overflow-x-auto">
+           <table class="w-full text-sm border border-slate-200 rounded-xl overflow-hidden">
+             <thead class="bg-slate-50">
+               <tr><th class="text-left p-3 border-b">Phần</th><th class="text-left p-3 border-b">Nội dung</th></tr>
+             </thead>
+             <tbody>${rows}</tbody>
+           </table>
+         </div>`));
 
       // Thumb & B-roll
-      out.appendChild(sectionCard({
-        badge: "🖼️",
-        title: "Gợi ý Thumbnail",
-        html: ul(engine.thumb)
-      }));
-      out.appendChild(sectionCard({
-        badge: "🎞️",
-        title: "Danh sách B-roll đề xuất",
-        html: ul(engine.broll)
-      }));
+      out.appendChild(sectionCardEl("🖼️","Gợi ý Thumbnail", ul([
+        "Tiêu đề 3–5 từ mạnh: ‘AI LÀ GIA SƯ?’",
+        "Ảnh chính: gương mặt cảm xúc + vật thể ẩn dụ (đèn bàn, sách mở)",
+        "Chữ bổ trợ 2–3 từ: ‘Nhanh Gấp 3’"
+      ])));
+      out.appendChild(sectionCardEl("🎞️","Danh sách B-roll đề xuất", ul([
+        "Bé học cùng laptop/ChatGPT",
+        "Close-up tay gõ bàn phím",
+        "Biểu đồ trước/sau",
+        "Giấy khen/điểm số"
+      ])));
 
       // Openers by tone
-      out.appendChild(sectionCard({
-        badge: "🎙️",
-        title: "Gợi ý lời thoại mở đầu (theo tông giọng)",
-        html: `
-          <p class="mb-2 text-sm text-slate-600">Tông: <span class="font-semibold">${engine.tone}</span></p>
-          ${ul([
-            `<b>Hook tương phản:</b> "Tôi từng nghĩ ${engine.topic.toLowerCase()} là ý tưởng tệ — cho đến khi thấy kết quả."`,
-            `<b>Giá trị tức thì:</b> "Trong 60 giây, bạn sẽ có 3 bước để ${engine.goal}."`,
-            `<b>Bằng chứng lồng ghép:</b> "Đây là minh chứng thật từ ${engine.audience.toLowerCase()} tuần trước."`
-          ])}
-        `
-      }));
+      out.appendChild(sectionCardEl("🎙️","Gợi ý lời thoại mở đầu (theo tông giọng)",
+        ul([
+          `<b>Hook tương phản:</b> "Tôi từng nghĩ ${engine.topic.toLowerCase()} là ý tưởng tệ — cho đến khi thấy kết quả."`,
+          `<b>Giá trị tức thì:</b> "Trong 60 giây, bạn sẽ có 3 bước để ${engine.goal}."`,
+          `<b>Bằng chứng lồng ghép:</b> "Đây là minh chứng thật từ ${engine.audience.toLowerCase()} tuần trước."`
+        ])
+      ));
     }
 
     // --- Initial values & events ---
     const defaults = {
-      topic: "AI giúp học sinh tiểu học học Toán nhanh hơn",
-      audience: "Phụ huynh có con cấp 1",
+      topic: topicExamples[0],
+      audience: audienceExamples[0],
       goal: "giúp khán giả áp dụng được ngay",
       platform: "shorts",
       tone: "Truyền cảm hứng",
@@ -422,14 +430,9 @@
       $("platform").value = defaults.platform;
       $("tone").value = defaults.tone;
       $("proofAssets").value = defaults.proofAssets;
-    }
-
-    async function copyJson() {
-      const input = readInput();
-      const data = buildEngine(input);
-      const payload = { input, data };
-      await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
-      alert("Đã sao chép cấu hình + gợi ý ra clipboard!");
+      // Fill preset dropdown defaults
+      $("topicPreset").value = "";
+      $("audiencePreset").value = "";
     }
 
     function readInput() {
@@ -441,6 +444,21 @@
         tone: $("tone").value,
         proofAssets: $("proofAssets").value.trim()
       };
+    }
+
+    function makeChip(text) {
+      const span = document.createElement("span");
+      span.className = "inline-flex items-center rounded-full border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 bg-white";
+      span.textContent = text;
+      return span;
+    }
+
+    async function copyJson() {
+      const input = readInput();
+      const data = buildEngine(input);
+      const payload = { input, data, topicExamples, audienceExamples };
+      await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+      alert("Đã sao chép cấu hình + gợi ý ra clipboard!");
     }
 
     $("generateBtn").addEventListener("click", () => {
@@ -456,6 +474,16 @@
     });
 
     $("copyJsonBtn").addEventListener("click", copyJson);
+
+    // Preset apply handlers
+    $("applyTopicPreset").addEventListener("click", () => {
+      const val = $("topicPreset").value;
+      if (val) $("topic").value = val;
+    });
+    $("applyAudiencePreset").addEventListener("click", () => {
+      const val = $("audiencePreset").value;
+      if (val) $("audience").value = val;
+    });
 
     // Boot
     setDefaults();
